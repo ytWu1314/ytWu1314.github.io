@@ -26,12 +26,11 @@
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
-
+    
     <script src="/libs/jquery/jquery.min.js"></script>
     <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
     
-<meta name="generator" content="Hexo 5.4.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+<meta name="generator" content="Hexo 5.4.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 
@@ -411,7 +410,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    282
+                    243
                 </div>
                 
 
@@ -440,7 +439,41 @@
             <div id="articleContent">
                 <h2 id="题目传送"><a href="#题目传送" class="headerlink" title="题目传送"></a><a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=3038">题目传送</a></h2><h2 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h2><p>给出一个区间的长度N，及M个子区间和，形如：x y z, 表示子区间[x, y]的和为z。<br>如果一个“子区间和”与前面的“子区间和”冲突，即为错误（而且这个“子区间和”将在接下来的判断中被忽略）。<br>求总错误个数。</p>
 <h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>这是一道带权并查集的题，维护子节点与祖先节点的关系d[x], d[x]表示节点x到节点p[x]的区间和。</p>
-<h2 id="题解代码"><a href="#题解代码" class="headerlink" title="题解代码"></a>题解代码</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> int long long</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">2e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="keyword">int</span> p[N], d[N];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (p[x] != x) &#123;</span><br><span class="line">        <span class="keyword">int</span> root = find(p[x]);</span><br><span class="line">        d[x] += d[p[x]];</span><br><span class="line">        p[x] = root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> p[x];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n, m;</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            p[i] = i;</span><br><span class="line">            d[i] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (m--) &#123;</span><br><span class="line">            <span class="keyword">int</span> x, y, z;</span><br><span class="line">            <span class="built_in">cin</span> &gt;&gt; x &gt;&gt; y &gt;&gt; z;</span><br><span class="line">            <span class="keyword">int</span> px = find(x - <span class="number">1</span>), py = find(y);</span><br><span class="line">            <span class="keyword">if</span> (px != py) &#123;</span><br><span class="line">                p[py] = px;</span><br><span class="line">                d[py] = d[x - <span class="number">1</span>] + z - d[y];</span><br><span class="line">            &#125; <span class="keyword">else</span> res += d[y] - d[x - <span class="number">1</span>] != z;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; res &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="题解代码"><a href="#题解代码" class="headerlink" title="题解代码"></a>题解代码</h2><pre class=" language-c++"><code class="language-c++">#include <iostream>
+using namespace std;
+#define int long long
+const int N = 2e5 + 5;
+int p[N], d[N];
+int find(int x) &#123;
+    if (p[x] != x) &#123;
+        int root = find(p[x]);
+        d[x] += d[p[x]];
+        p[x] = root;
+    &#125;
+    return p[x];
+&#125;
+signed main() &#123;
+    int n, m;
+    while (cin >> n >> m) &#123;
+        for (int i = 0; i <= n; i++) &#123;
+            p[i] = i;
+            d[i] = 0;
+        &#125;
+        int res = 0;
+        while (m--) &#123;
+            int x, y, z;
+            cin >> x >> y >> z;
+            int px = find(x - 1), py = find(y);
+            if (px != py) &#123;
+                p[py] = px;
+                d[py] = d[x - 1] + z - d[y];
+            &#125; else res += d[y] - d[x - 1] != z;
+        &#125;
+        cout << res << endl;
+    &#125;
+    return 0;
+&#125;
+</code></pre>
 
                 
             </div>
@@ -1179,7 +1212,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">503</span>&nbsp;字
+                class="white-color">338</span>&nbsp;字
             
             
             
@@ -1276,8 +1309,6 @@
 </div>
     </div>
 </footer>
-
-<div class="progress-bar"></div>
 
 
     <!-- 搜索遮罩框 -->
